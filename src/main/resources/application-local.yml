@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  context-path: /consumer-api
+
+spring:
+  profiles: local
+  application.name: consumer-api
+  cloud:
+    stream:
+      bindings:
+        input:
+          binder: kafka
+          destination: iot-data
+          group: consumer-group-1
+      kafka:
+        binder:
+          brokers: localhost:29092
+          autoCreateTopics: true
+          minPartitionCount: 3
+          group: output-group-1
+      default-binder: kafka
+
+logging:
+  level:
+    root: INFO
+    br.com.iot: DEBUG
+  pattern:
+    console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'
