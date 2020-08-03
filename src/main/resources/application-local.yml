@@ -1,8 +1,16 @@
 server:
-  port: 8080
+  port: 8092
   context-path: /consumer-api
 
 spring:
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5432/iot_db
+    username: postgres
+    password: password
+  flyway:
+    url: jdbc:postgresql://localhost:5432/iot_db
+    user: postgres
+    password: password
   profiles: local
   application.name: consumer-api
   cloud:
@@ -12,14 +20,14 @@ spring:
           binder: kafka
           destination: iot-data
           group: consumer-group-1
+          content-type: application/json
       kafka:
         binder:
-          brokers: localhost:29092
+          brokers: localhost:9092
           autoCreateTopics: true
           minPartitionCount: 3
           group: output-group-1
       default-binder: kafka
-
 logging:
   level:
     root: INFO

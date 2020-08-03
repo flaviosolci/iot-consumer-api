@@ -25,12 +25,21 @@ java {
 }
 
 dependencies {
-    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.mapstruct:mapstruct:1.4.0.Beta3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.0.Beta3'
+    implementation 'org.flywaydb:flyway-core'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.4.RELEASE'
+    runtimeOnly 'org.postgresql:postgresql'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
