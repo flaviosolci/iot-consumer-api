@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 @Validated
 @RestController
 @RequestMapping("/sensor")
@@ -23,9 +25,8 @@ public class SensorController {
         this.sensorEventsQueryService = sensorEventsQueryService;
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping(path = "/events/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<Void> findAll(@PathVariable Long sensorId, SearchSensorEventsRequest filterRequest) {
+    @GetMapping(path = "/events/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<Void> findAll(@PathVariable Long sensorId, @Valid SearchSensorEventsRequest filterRequest) {
         return Mono.empty();
     }
 }

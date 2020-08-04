@@ -1,12 +1,21 @@
 package br.com.iot.consumer.api.controller.request;
 
-import br.com.iot.consumer.api.model.sorting.SensorEventSortField;
+import br.com.iot.consumer.api.model.search.SensorEventSortField;
+import br.com.iot.consumer.api.model.search.SortDirection;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 public class SearchSensorEventsRequest {
 
+    @Valid
+    @NotNull
     private FilterEvents filter;
+    @Valid
     private PageAndSortEvents page;
 
     public FilterEvents getFilter() {
@@ -35,24 +44,28 @@ public class SearchSensorEventsRequest {
 
     public static class FilterEvents {
 
-        private OffsetDateTime from;
-        private OffsetDateTime to;
+        @NotNull
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        private LocalDateTime startDate;
+        @NotNull
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        private LocalDateTime endDate;
         private String eventType;
 
-        public OffsetDateTime getFrom() {
-            return from;
+        public LocalDateTime getStartDate() {
+            return startDate;
         }
 
-        public void setFrom(OffsetDateTime from) {
-            this.from = from;
+        public void setStartDate(LocalDateTime startDate) {
+            this.startDate = startDate;
         }
 
-        public OffsetDateTime getTo() {
-            return to;
+        public LocalDateTime getEndDate() {
+            return endDate;
         }
 
-        public void setTo(OffsetDateTime to) {
-            this.to = to;
+        public void setEndDate(LocalDateTime endDate) {
+            this.endDate = endDate;
         }
 
         public String getEventType() {
@@ -66,8 +79,8 @@ public class SearchSensorEventsRequest {
         @Override
         public String toString() {
             return "FilterEvents{" +
-                    "from=" + from +
-                    ", to=" + to +
+                    "from=" + startDate +
+                    ", to=" + endDate +
                     ", eventType='" + eventType + '\'' +
                     '}';
         }
@@ -75,9 +88,13 @@ public class SearchSensorEventsRequest {
 
     public static class PageAndSortEvents {
 
-        private Integer limit;
-        private Integer offset;
-        private SensorEventSortField sortBy;
+        @Max(value = 50, message = "The field 'limit' must be between 1 and 50.")
+        @Min(value = 1, message = "The field 'limit' must be between 1 and 50.")
+        private Integer limit = 50;
+        @Min(value = 0, message = "The field 'offset' starts at 0")
+        private Integer offset = 0;
+        private SensorEventSortField sortBy = SensorEventSortField.TIMESTAMP;
+        private SortDirection direction = SortDirection.DESC;
 
         public Integer getLimit() {
             return limit;
