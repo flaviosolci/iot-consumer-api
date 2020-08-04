@@ -11,6 +11,6 @@ import java.time.ZoneOffset;
 public interface SensorEventMapper {
 
     default SensorEventEntity toEntity(SensorEvent event) {
-        return new SensorEventEntity(Instant.ofEpochMilli(event.getTimestamp()).atOffset(ZoneOffset.UTC), event.getId(), event.getType(), event.getValue());
+        return new SensorEventEntity(Instant.ofEpochMilli(event.getTimestamp()).atOffset(ZoneOffset.UTC), event.getId(), event.getType(), event.getValue(), event.getName());
     }
 }
