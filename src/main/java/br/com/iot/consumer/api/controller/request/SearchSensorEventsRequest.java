@@ -1,7 +1,7 @@
 package br.com.iot.consumer.api.controller.request;
 
 import br.com.iot.consumer.api.model.search.SensorEventSortField;
-import br.com.iot.consumer.api.model.search.SortDirection;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
@@ -14,9 +14,9 @@ public class SearchSensorEventsRequest {
 
     @Valid
     @NotNull
-    private FilterEvents filter;
+    private FilterEvents filter = new FilterEvents();
     @Valid
-    private PageAndSortEvents page;
+    private PageAndSortEvents page = new PageAndSortEvents();
 
     public FilterEvents getFilter() {
         return filter;
@@ -88,13 +88,13 @@ public class SearchSensorEventsRequest {
 
     public static class PageAndSortEvents {
 
-        @Max(value = 50, message = "The field 'limit' must be between 1 and 50.")
-        @Min(value = 1, message = "The field 'limit' must be between 1 and 50.")
+        @Max(value = 1000, message = "The field 'limit' must be between 1 and 1000.")
+        @Min(value = 1, message = "The field 'limit' must be between 1 and 1000.")
         private Integer limit = 50;
-        @Min(value = 0, message = "The field 'offset' starts at 0")
-        private Integer offset = 0;
+        @Min(value = 1, message = "The field 'page' starts at 1")
+        private Integer page = 1;
         private SensorEventSortField sortBy = SensorEventSortField.TIMESTAMP;
-        private SortDirection direction = SortDirection.DESC;
+        private Sort.Direction direction = Sort.Direction.DESC;
 
         public Integer getLimit() {
             return limit;
@@ -104,12 +104,12 @@ public class SearchSensorEventsRequest {
             this.limit = limit;
         }
 
-        public Integer getOffset() {
-            return offset;
+        public Integer getPage() {
+            return page;
         }
 
-        public void setOffset(Integer offset) {
-            this.offset = offset;
+        public void setPage(Integer page) {
+            this.page = page;
         }
 
         public SensorEventSortField getSortBy() {
@@ -120,11 +120,19 @@ public class SearchSensorEventsRequest {
             this.sortBy = sortBy;
         }
 
+        public Sort.Direction getDirection() {
+            return direction;
+        }
+
+        public void setDirection(Sort.Direction direction) {
+            this.direction = direction;
+        }
+
         @Override
         public String toString() {
             return "PageAndSortEvents{" +
                     "limit=" + limit +
-                    ", offset=" + offset +
+                    ", offset=" + page +
                     ", sortBy=" + sortBy +
                     '}';
         }

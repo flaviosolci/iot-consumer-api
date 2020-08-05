@@ -38,6 +38,10 @@ public class SensorEventEntity {
         return sensorId;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "SensorEventEntity{" +
