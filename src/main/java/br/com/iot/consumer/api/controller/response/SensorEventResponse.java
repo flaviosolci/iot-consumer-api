@@ -3,12 +3,13 @@ package br.com.iot.consumer.api.controller.response;
 import org.immutables.value.Value;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Value.Immutable
 public interface SensorEventResponse {
 
-    OffsetDateTime getTimestamp();
+    LocalDateTime getTimestamp();
 
     Long getSensorId();
 

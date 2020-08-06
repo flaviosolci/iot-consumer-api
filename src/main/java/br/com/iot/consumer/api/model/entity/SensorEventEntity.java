@@ -3,18 +3,19 @@ package br.com.iot.consumer.api.model.entity;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Table("sensor_event")
 public class SensorEventEntity {
 
-    private final OffsetDateTime timestamp;
+    private final LocalDateTime timestamp;
     private final Long sensorId;
     private final String type;
     private final BigDecimal value;
     private final String name;
 
-    public SensorEventEntity(OffsetDateTime timestamp, Long sensorId, String type, BigDecimal value, String name) {
+    public SensorEventEntity(LocalDateTime timestamp, Long sensorId, String type, BigDecimal value, String name) {
         this.timestamp = timestamp;
         this.sensorId = sensorId;
         this.type = type;
@@ -30,7 +31,7 @@ public class SensorEventEntity {
         return value;
     }
 
-    public OffsetDateTime getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 

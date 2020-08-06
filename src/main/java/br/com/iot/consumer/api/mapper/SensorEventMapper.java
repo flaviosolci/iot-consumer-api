@@ -6,6 +6,7 @@ import br.com.iot.consumer.api.model.dto.AggregateSensorEventDto;
 import br.com.iot.consumer.api.model.entity.SensorEventEntity;
 import br.com.iot.consumer.api.model.event.SensorEvent;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -13,9 +14,8 @@ import java.time.ZoneOffset;
 @Mapper(componentModel = "spring")
 public interface SensorEventMapper {
 
-    default SensorEventEntity toEntity(SensorEvent event) {
-        return new SensorEventEntity(Instant.ofEpochMilli(event.getTimestamp()).atOffset(ZoneOffset.UTC), event.getId(), event.getType(), event.getValue(), event.getName());
-    }
+    @Mapping(target = "sensorId", source = "id")
+    SensorEventEntity toEntity(SensorEvent event);
 
     SensorEventResponse toResponse(SensorEventEntity entity);
 

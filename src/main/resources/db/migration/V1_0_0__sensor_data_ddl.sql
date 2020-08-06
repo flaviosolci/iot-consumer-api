@@ -1,5 +1,5 @@
 CREATE TABLE sensor_event (
-	timestamp timestamptz NOT NULL,
+	timestamp timestamp NOT NULL,
 	sensor_id integer NOT NULL,
 	name varchar NULL,
 	type varchar NOT NULL,

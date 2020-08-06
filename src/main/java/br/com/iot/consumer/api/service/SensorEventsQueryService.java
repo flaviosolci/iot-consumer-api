@@ -8,9 +8,11 @@ import br.com.iot.consumer.api.exception.InvalidValueException;
 import br.com.iot.consumer.api.mapper.SensorEventMapper;
 import br.com.iot.consumer.api.repository.SensorEventRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 @Service
+@Transactional(readOnly = true)
 public class SensorEventsQueryService {
 
     private final SensorEventRepository sensorEventRepository;

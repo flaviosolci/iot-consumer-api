@@ -1,12 +1,13 @@
 package br.com.iot.consumer.api.model.event;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class SensorEvent {
 
     private Long id;
     private BigDecimal value;
-    private Long timestamp;
+    private LocalDateTime timestamp;
     private String type;
     private String name;
 
@@ -26,11 +27,11 @@ public class SensorEvent {
         this.value = value;
     }
 
-    public Long getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

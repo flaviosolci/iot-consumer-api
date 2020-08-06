@@ -33,6 +33,5 @@ logging:
     root: INFO
     br.com.iot: DEBUG
     org.springframework.data.r2dbc: trace
-
   pattern:
     console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'
