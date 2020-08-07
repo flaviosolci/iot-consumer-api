@@ -52,5 +52,4 @@ public class SensorEventEntity {
                 ", name='" + name + '\'' +
                 '}';
     }
-
 }

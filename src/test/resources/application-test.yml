@@ -3,15 +3,21 @@ server:
   context-path: /consumer-api
 
 spring:
+  profiles: test
   main:
     banner-mode: off
     lazy-initialization: true
-  profiles: test
-
+  r2dbc:
+    url: r2dbc:h2:mem:///iot_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: postgres
+    password: password
+  flyway:
+    enabled: false
 logging:
   level:
-    root: OFF
-    org.springframework: OFF
+    root: INFO
     br.com.iot: DEBUG
+    org.springframework.data.r2dbc: DEBUG
+    org.springframework.data.r2dbc.connectionfactory: DEBUG
   pattern:
-    console: '%highlight(<<%-5level>>) %d{HH:mm:ss.SSS} [%thread] %cyan(%c{0}) - %msg%n %ex{short}'
+    console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'

@@ -1,16 +1,17 @@
 package br.com.iot.consumer.api.service;
 
-import br.com.iot.consumer.api.controller.request.AggregateSensorEventsRequest;
-import br.com.iot.consumer.api.controller.request.SearchSensorEventsRequest;
+import br.com.iot.consumer.api.controller.request.AggregateEventsFilter;
+import br.com.iot.consumer.api.controller.request.EventsFilter;
 import br.com.iot.consumer.api.controller.response.AggregateSensorEventResponse;
 import br.com.iot.consumer.api.controller.response.SensorEventResponse;
-import br.com.iot.consumer.api.exception.InvalidValueException;
 import br.com.iot.consumer.api.mapper.SensorEventMapper;
 import br.com.iot.consumer.api.repository.SensorEventRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 @Service
+@Transactional(readOnly = true)
 public class SensorEventsQueryService {
 
     private final SensorEventRepository sensorEventRepository;
@@ -21,13 +22,13 @@ public class SensorEventsQueryService {
         this.sensorEventMapper = sensorEventMapper;
     }
 
-    public Flux<SensorEventResponse> findBySensorId(Long sensorId, SearchSensorEventsRequest filterRequest) {
-        return sensorEventRepository.findBySensorIdWithFilters(sensorId, filterRequest)
+    public Flux<SensorEventResponse> findAllWithFilter(EventsFilter filterRequest) {
+        return sensorEventRepository.findBySensorIdWithFilters(filterRequest)
                 .map(sensorEventMapper::toResponse);
     }
 
-    public Flux<AggregateSensorEventResponse> aggregate(AggregateSensorEventsRequest aggregateSensorEventsRequest) throws InvalidValueException {
-        return sensorEventRepository.aggregateAsPerRequest(aggregateSensorEventsRequest)
+    public Flux<AggregateSensorEventResponse> aggregateAllWithFilter(AggregateEventsFilter aggregateEventsFilter) {
+        return sensorEventRepository.aggregateAsPerRequest(aggregateEventsFilter)
                 .map(sensorEventMapper::toResponse);
     }
 }

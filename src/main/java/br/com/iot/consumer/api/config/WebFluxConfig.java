@@ -2,11 +2,15 @@ package br.com.iot.consumer.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
+
+import java.util.List;
 
 @EnableWebFlux
 @Configuration
@@ -15,10 +19,12 @@ public class WebFluxConfig implements WebFluxConfigurer {
 
     private final Jackson2JsonEncoder encoder;
     private final Jackson2JsonDecoder decoder;
+    private final List<Converter<String, ? extends Enum>> converters;
 
-    public WebFluxConfig(Jackson2JsonEncoder encoder, Jackson2JsonDecoder decoder) {
+    public WebFluxConfig(Jackson2JsonEncoder encoder, Jackson2JsonDecoder decoder, List<Converter<String, ? extends Enum>> converters) {
         this.encoder = encoder;
         this.decoder = decoder;
+        this.converters = converters;
     }
 
     @Override
@@ -27,4 +33,8 @@ public class WebFluxConfig implements WebFluxConfigurer {
         configurer.defaultCodecs().jackson2JsonDecoder(decoder);
     }
 
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        converters.forEach(registry::addConverter);
+    }
 }
