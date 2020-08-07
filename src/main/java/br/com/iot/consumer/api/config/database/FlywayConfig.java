@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * See more: https://github.com/flyway/flyway/issues/2502
  */
 @Configuration
-public class DatabaseConfig {
+public class FlywayConfig {
 
     @Bean(initMethod = "migrate")
     Flyway flyway(@Value("${spring.flyway.url}") String url,

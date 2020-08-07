@@ -1,10 +1,9 @@
 CREATE TABLE sensor_event (
-	"timestamp" timestamp NOT NULL,
+	"timestamp" TIMESTAMP WITH TIME ZONE NOT NULL,
 	sensor_id integer NOT NULL,
 	name varchar NULL,
 	type varchar NOT NULL,
-	"value" double precision NOT NULL,
-	PRIMARY KEY("timestamp", sensor_id)
+	"value" double precision NOT NULL
 );
 COMMENT ON TABLE sensor_event IS 'Hold the date for all the sensors events';
 

@@ -1,12 +1,13 @@
+
+
 CREATE TABLE sensor_event (
-	timestamp timestamp NOT NULL,
+	timestamp timestamptz NOT NULL,
 	sensor_id integer NOT NULL,
 	name varchar NULL,
 	type varchar NOT NULL,
-	value double precision NOT NULL,
-	PRIMARY KEY(timestamp, sensor_id)
+	value double precision NOT NULL
 );
-COMMENT ON TABLE public.sensor_event IS 'Hold the date for all the sensors events';
+COMMENT ON TABLE sensor_event IS 'Hold the date for all the sensors events';
 
 COMMENT ON COLUMN sensor_event.timestamp IS 'When the event occurred';
 COMMENT ON COLUMN sensor_event.sensor_id IS 'Sensor ID (unique to each sensor)';

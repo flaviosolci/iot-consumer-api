@@ -10,27 +10,27 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class SearchSensorEventsRequest {
+public class EventsFilter {
 
     @Valid
     @NotNull
-    private FilterEvents filter = new FilterEvents();
+    private Filter filter = new Filter();
     @Valid
-    private PageAndSortEvents page = new PageAndSortEvents();
+    private PageAndSort page = new PageAndSort();
 
-    public FilterEvents getFilter() {
+    public Filter getFilter() {
         return filter;
     }
 
-    public void setFilter(FilterEvents filter) {
+    public void setFilter(Filter filter) {
         this.filter = filter;
     }
 
-    public PageAndSortEvents getPage() {
+    public PageAndSort getPage() {
         return page;
     }
 
-    public void setPage(PageAndSortEvents page) {
+    public void setPage(PageAndSort page) {
         this.page = page;
     }
 
@@ -42,7 +42,7 @@ public class SearchSensorEventsRequest {
                 '}';
     }
 
-    public static class FilterEvents {
+    public static class Filter {
 
         @NotNull
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -51,6 +51,7 @@ public class SearchSensorEventsRequest {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime endDate;
         private String eventType;
+        private Long sensorId;
 
         public LocalDateTime getStartDate() {
             return startDate;
@@ -76,24 +77,35 @@ public class SearchSensorEventsRequest {
             this.eventType = eventType;
         }
 
+        public Long getSensorId() {
+            return sensorId;
+        }
+
+        public void setSensorId(Long sensorId) {
+            this.sensorId = sensorId;
+        }
+
         @Override
         public String toString() {
-            return "FilterEvents{" +
-                    "from=" + startDate +
-                    ", to=" + endDate +
+            return "Filter{" +
+                    "startDate=" + startDate +
+                    ", endDate=" + endDate +
                     ", eventType='" + eventType + '\'' +
+                    ", sensorId=" + sensorId +
                     '}';
         }
     }
 
-    public static class PageAndSortEvents {
+    public static class PageAndSort {
 
         @Max(value = 1000, message = "The field 'limit' must be between 1 and 1000.")
         @Min(value = 1, message = "The field 'limit' must be between 1 and 1000.")
         private Integer limit = 50;
-        @Min(value = 1, message = "The field 'page' starts at 1")
-        private Integer page = 1;
+        @Min(value = 0, message = "The field 'page' starts at 0")
+        private Integer offset = 0;
+        @NotNull
         private SensorEventSortField sortBy = SensorEventSortField.TIMESTAMP;
+        @NotNull
         private Sort.Direction direction = Sort.Direction.DESC;
 
         public Integer getLimit() {
@@ -104,12 +116,12 @@ public class SearchSensorEventsRequest {
             this.limit = limit;
         }
 
-        public Integer getPage() {
-            return page;
+        public Integer getOffset() {
+            return offset;
         }
 
-        public void setPage(Integer page) {
-            this.page = page;
+        public void setOffset(Integer offset) {
+            this.offset = offset;
         }
 
         public SensorEventSortField getSortBy() {
@@ -130,10 +142,11 @@ public class SearchSensorEventsRequest {
 
         @Override
         public String toString() {
-            return "PageAndSortEvents{" +
+            return "PageAndSort{" +
                     "limit=" + limit +
-                    ", offset=" + page +
+                    ", offset=" + offset +
                     ", sortBy=" + sortBy +
+                    ", direction=" + direction +
                     '}';
         }
     }

@@ -1,9 +1,7 @@
 package br.com.iot.consumer.api.repository;
 
-import br.com.iot.consumer.api.controller.SensorController;
-import br.com.iot.consumer.api.controller.request.AggregateSensorEventsRequest;
-import br.com.iot.consumer.api.controller.request.SearchSensorEventsRequest;
-import br.com.iot.consumer.api.exception.InvalidValueException;
+import br.com.iot.consumer.api.controller.request.AggregateEventsFilter;
+import br.com.iot.consumer.api.controller.request.EventsFilter;
 import br.com.iot.consumer.api.model.dto.AggregateSensorEventDto;
 import br.com.iot.consumer.api.model.entity.SensorEventEntity;
 import br.com.iot.consumer.api.repository.sql.AggregateSqlFactory;
@@ -51,28 +49,30 @@ public class SensorEventRepository {
     // ===========================
 
     @Transactional(readOnly = true)
-    public Flux<SensorEventEntity> findBySensorIdWithFilters(Long sensorId, SearchSensorEventsRequest filterRequest) {
+    public Flux<SensorEventEntity> findBySensorIdWithFilters(EventsFilter filterRequest) {
         return databaseClient.select()
                 .from(SensorEventEntity.class)
-                .matching(getFindAllCriteria(filterRequest, sensorId))
+                .matching(getFindAllCriteria(filterRequest))
                 .page(getFindAllPageable(filterRequest))
                 .as(SensorEventEntity.class)
                 .all();
     }
 
-    private PageRequest getFindAllPageable(SearchSensorEventsRequest filterRequest) {
-        return PageRequest.of(filterRequest.getPage().getPage() - 1,
+    private PageRequest getFindAllPageable(EventsFilter filterRequest) {
+        return PageRequest.of(filterRequest.getPage().getOffset(),
                 filterRequest.getPage().getLimit(),
                 Sort.by(filterRequest.getPage().getDirection(), filterRequest.getPage().getSortBy().getValue()));
     }
 
-    private Criteria getFindAllCriteria(SearchSensorEventsRequest filterRequest, Long sensorId) {
+    private Criteria getFindAllCriteria(EventsFilter filterRequest) {
         Criteria criteria = where("timestamp")
-                .between(filterRequest.getFilter().getStartDate(), filterRequest.getFilter().getEndDate())
-                .and("sensor_id").is(sensorId);
+                .between(filterRequest.getFilter().getStartDate(), filterRequest.getFilter().getEndDate());
+
         if (StringUtils.isNotEmpty(filterRequest.getFilter().getEventType())) {
-            criteria = criteria.and("type")
-                    .is(filterRequest.getFilter().getEventType());
+            criteria = criteria.and("type").is(filterRequest.getFilter().getEventType());
+        }
+        if (filterRequest.getFilter().getSensorId() != null) {
+            criteria = criteria.and("sensor_id").is(filterRequest.getFilter().getSensorId());
         }
 
         return criteria;
@@ -83,8 +83,9 @@ public class SensorEventRepository {
     // ===========================
 
     @Transactional(readOnly = true)
-    public Flux<AggregateSensorEventDto> aggregateAsPerRequest(AggregateSensorEventsRequest request) throws InvalidValueException {
-        return aggregateSqlFactory.get(request.getFunctionType()).execute(databaseClient, request)
+    public Flux<AggregateSensorEventDto> aggregateAsPerRequest(AggregateEventsFilter request) {
+        return aggregateSqlFactory.get(request.getAggregate().getType())
+                .execute(databaseClient, request)
                 .doFirst(() -> LOG.debug("==== Running query to aggregate events. Request -> {}", request));
     }
 }

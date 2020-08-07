@@ -8,9 +8,6 @@ import br.com.iot.consumer.api.model.event.SensorEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-
 @Mapper(componentModel = "spring")
 public interface SensorEventMapper {
 

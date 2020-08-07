@@ -1,8 +1,10 @@
 server:
   port: 8092
-  context-path: /consumer-api
+  shutdown: GRACEFUL
 
 spring:
+  webflux:
+    base-path: /consumer-api
   r2dbc:
     url: r2dbc:pool:postgresql://localhost:5432/iot_db
     username: postgres
@@ -11,27 +13,23 @@ spring:
     url: jdbc:postgresql://localhost:5432/iot_db
     user: postgres
     password: password
+    defaultSchema: iot_data
   profiles: local
   application.name: consumer-api
   cloud:
     stream:
+      function:
+        definition: saveEvent
       bindings:
-        input:
-          binder: kafka
+        saveEvent-in-0:
           destination: iot-data
-          group: consumer-group-1
+          group: iot-data-consumer
           content-type: application/json
       kafka:
-        binder:
-          brokers: localhost:9092
-          autoCreateTopics: true
-          minPartitionCount: 3
-          group: output-group-1
-      default-binder: kafka
+        brokers: localhost:9092
 logging:
   level:
     root: INFO
     br.com.iot: DEBUG
-    org.springframework.data.r2dbc: trace
   pattern:
     console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'
