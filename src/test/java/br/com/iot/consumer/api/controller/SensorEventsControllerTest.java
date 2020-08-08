@@ -35,7 +35,7 @@ class SensorEventsControllerTest {
     void setUp() {
         webClient = WebTestClient.bindToApplicationContext(applicationContext)
                 .configureClient()
-                .baseUrl("/v1/events")
+                .baseUrl("/events")
                 .build();
         when(eventsQueryService.aggregateAllWithFilter(any())).thenReturn(Flux.empty());
         when(eventsQueryService.findAllWithFilter(any())).thenReturn(Flux.empty());

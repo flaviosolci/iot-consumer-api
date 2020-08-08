@@ -4,9 +4,11 @@ import br.com.iot.consumer.api.model.search.SensorEventSortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 @Component
+@ReadingConverter
 public class StringToSensorEventSortField implements Converter<String, SensorEventSortField> {
     private static final Logger LOG = LoggerFactory.getLogger(StringToSensorEventSortField.class);
 

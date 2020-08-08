@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/v1/events")
+@RequestMapping("/events")
 public class SensorEventsController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SensorEventsController.class);

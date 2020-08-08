@@ -21,6 +21,7 @@ import reactor.test.StepVerifier;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +43,7 @@ class SensorEventsQueryServiceTest {
     @Test
     void testFindBySensorId() {
         final var timestamp = OffsetDateTime.of(2020, 10, 1, 10, 10, 10, 10, ZoneOffset.UTC);
-        final var sensorEventEntity = new SensorEventEntity(timestamp, 1234L, "CPU", BigDecimal.TEN, "test");
+        final var sensorEventEntity = new SensorEventEntity(timestamp, 1234L, "CPU", BigDecimal.TEN, "test", "{\"json\":\"test\"}");
         when(eventRepository.findBySensorIdWithFilters(any())).thenReturn(Flux.just(sensorEventEntity));
 
         final var expected = ImmutableSensorEventResponse.builder()

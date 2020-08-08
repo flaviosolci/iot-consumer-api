@@ -4,6 +4,8 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.Map;
 
 @Table("sensor_event")
 public class SensorEventEntity {
@@ -13,13 +15,15 @@ public class SensorEventEntity {
     private final String type;
     private final BigDecimal value;
     private final String name;
+    private final String metadata;
 
-    public SensorEventEntity(OffsetDateTime timestamp, Long sensorId, String type, BigDecimal value, String name) {
+    public SensorEventEntity(OffsetDateTime timestamp, Long sensorId, String type, BigDecimal value, String name, String metadata) {
         this.timestamp = timestamp;
         this.sensorId = sensorId;
         this.type = type;
         this.value = value;
         this.name = name;
+        this.metadata = metadata;
     }
 
     public String getType() {
@@ -40,6 +44,10 @@ public class SensorEventEntity {
 
     public String getName() {
         return name;
+    }
+
+    public String getMetadata() {
+        return metadata;
     }
 
     @Override

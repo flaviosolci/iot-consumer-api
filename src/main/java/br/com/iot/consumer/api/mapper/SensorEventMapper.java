@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 public interface SensorEventMapper {
 
     @Mapping(target = "sensorId", source = "id")
+    @Mapping(target = "metadata", expression = "java(event.getMetadata() == null ? \"\": event.getMetadata().toString())")
     SensorEventEntity toEntity(SensorEvent event);
 
     SensorEventResponse toResponse(SensorEventEntity entity);

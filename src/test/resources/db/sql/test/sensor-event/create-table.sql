@@ -3,7 +3,8 @@ CREATE TABLE sensor_event (
 	sensor_id integer NOT NULL,
 	name varchar NULL,
 	type varchar NOT NULL,
-	"value" double precision NOT NULL
+	"value" double precision NOT NULL,
+	metadata JSON  NULL
 );
 COMMENT ON TABLE sensor_event IS 'Hold the date for all the sensors events';
 
