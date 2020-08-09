@@ -5,6 +5,7 @@ import br.com.iot.consumer.api.model.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -69,4 +70,16 @@ public class ControllerExceptionHandler {
                 .description(BaseErrorMessages.GENERIC_ERROR.getMessage())
                 .build();
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorResponse handleAccessDeniedException(AccessDeniedException exception) {
+        LOG.error("=== AccessDeniedException {}", exception.getLocalizedMessage());
+        return ImmutableErrorResponse.builder()
+                .description(BaseErrorMessages.GENERIC_UNAUTHORIZED_EXCEPTION.getMessage())
+                .code(AccessDeniedException.class.getSimpleName())
+                .build();
+    }
+
+
 }

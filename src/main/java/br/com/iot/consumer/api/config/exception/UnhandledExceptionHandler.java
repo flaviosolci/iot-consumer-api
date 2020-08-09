@@ -1,6 +1,7 @@
 package br.com.iot.consumer.api.config.exception;
 
 import br.com.iot.consumer.api.exception.BaseException;
+import br.com.iot.consumer.api.exception.UnauthenticatedException;
 import br.com.iot.consumer.api.model.exception.ErrorResponse;
 import br.com.iot.consumer.api.model.exception.ImmutableErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,6 +50,8 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
             LOG.error("error", ex);
             if (ex instanceof MethodNotAllowedException) {
                 return handleMethodNotAllowedException(exchange, (MethodNotAllowedException) ex);
+            } else if (ex instanceof UnauthenticatedException) {
+                return handleUnauthenticatedException(exchange, ex);
             } else if (ex instanceof ResponseStatusException) {
                 return handleResourceNotFoundException(exchange, (ResponseStatusException) ex);
             } else {
@@ -60,6 +63,18 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
             return exchange.getResponse().setComplete();
         }
 
+    }
+
+    private Mono<Void> handleUnauthenticatedException(ServerWebExchange exchange, Throwable ex) throws JsonProcessingException {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        final var errorResponse = ImmutableErrorResponse.builder()
+                .code(ex.getClass().getSimpleName())
+                .description(GENERIC_UNAUTHENTICATED_EXCEPTION.getMessage())
+                .build();
+
+        return Mono.from(writeResponse(exchange, errorResponse));
     }
 
     /** handle 405 error */

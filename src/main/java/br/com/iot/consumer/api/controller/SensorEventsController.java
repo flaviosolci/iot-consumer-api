@@ -8,6 +8,7 @@ import br.com.iot.consumer.api.service.SensorEventsQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/v1/events")
+@RequestMapping("/events")
 public class SensorEventsController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SensorEventsController.class);
@@ -29,6 +30,7 @@ public class SensorEventsController {
         this.sensorEventsQueryService = sensorEventsQueryService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<SensorEventResponse> findAll(@Valid EventsFilter eventsFilter) {
         return sensorEventsQueryService.findAllWithFilter(eventsFilter)
@@ -36,6 +38,7 @@ public class SensorEventsController {
                 .doOnComplete(() -> LOG.info("==== Returning all events with the filters {}", eventsFilter));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(path = "/aggregate", produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<AggregateSensorEventResponse> aggregate(@Valid AggregateEventsFilter eventsFilter) {
         return sensorEventsQueryService.aggregateAllWithFilter(eventsFilter)
