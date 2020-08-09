@@ -1,9 +1,9 @@
 package br.com.iot.consumer.api.config.exception;
 
 import br.com.iot.consumer.api.exception.BaseException;
-import br.com.iot.consumer.api.exception.NotFoundException;
-import br.com.iot.consumer.api.model.exception.BaseErrorMessages;
+import br.com.iot.consumer.api.exception.UnauthenticatedException;
 import br.com.iot.consumer.api.model.exception.ErrorResponse;
+import br.com.iot.consumer.api.model.exception.ImmutableErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -22,6 +22,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
 import reactor.core.publisher.Mono;
 import reactor.util.annotation.NonNull;
+
+import static br.com.iot.consumer.api.model.exception.BaseErrorMessages.*;
 
 /**
  * Any exception that happens before the process reaches a Controller class.
@@ -48,6 +50,8 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
             LOG.error("error", ex);
             if (ex instanceof MethodNotAllowedException) {
                 return handleMethodNotAllowedException(exchange, (MethodNotAllowedException) ex);
+            } else if (ex instanceof UnauthenticatedException) {
+                return handleUnauthenticatedException(exchange, ex);
             } else if (ex instanceof ResponseStatusException) {
                 return handleResourceNotFoundException(exchange, (ResponseStatusException) ex);
             } else {
@@ -61,12 +65,27 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
 
     }
 
+    private Mono<Void> handleUnauthenticatedException(ServerWebExchange exchange, Throwable ex) throws JsonProcessingException {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        final var errorResponse = ImmutableErrorResponse.builder()
+                .code(ex.getClass().getSimpleName())
+                .description(GENERIC_UNAUTHENTICATED_EXCEPTION.getMessage())
+                .build();
+
+        return Mono.from(writeResponse(exchange, errorResponse));
+    }
+
     /** handle 405 error */
     private Mono<Void> handleMethodNotAllowedException(final ServerWebExchange exchange, final MethodNotAllowedException ex) throws JsonProcessingException {
         exchange.getResponse().setStatusCode(HttpStatus.METHOD_NOT_ALLOWED);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        final ErrorResponse errorResponse = new ErrorResponse(ex.getClass().getSimpleName(), BaseErrorMessages.GENERIC_METHOD_NOT_ALLOWED.withParams(ex.getHttpMethod()), null);
+        final var errorResponse = ImmutableErrorResponse.builder()
+                .code(ex.getClass().getSimpleName())
+                .description(GENERIC_METHOD_NOT_ALLOWED.withParams(ex.getHttpMethod()).getMessage())
+                .build();
 
         return Mono.from(writeResponse(exchange, errorResponse));
     }
@@ -76,7 +95,10 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
         exchange.getResponse().setStatusCode(ex.getStatus());
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        final ErrorResponse errorResponse = new ErrorResponse(NotFoundException.class.getSimpleName(), BaseErrorMessages.GENERIC_NOT_FOUND.getMessage(), null);
+        final ErrorResponse errorResponse = ImmutableErrorResponse.builder()
+                .code(ex.getClass().getSimpleName())
+                .description(GENERIC_NOT_FOUND.getMessage())
+                .build();
 
         return Mono.from(writeResponse(exchange, errorResponse));
     }
@@ -86,7 +108,10 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
         exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        final ErrorResponse errorResponse = new ErrorResponse(BaseException.class.getSimpleName(), BaseErrorMessages.GENERIC_ERROR.getMessage(), null);
+        final ErrorResponse errorResponse = ImmutableErrorResponse.builder()
+                .code(BaseException.class.getSimpleName())
+                .description(GENERIC_ERROR.getMessage())
+                .build();
 
         return Mono.from(writeResponse(exchange, errorResponse));
     }
@@ -96,5 +121,4 @@ public class UnhandledExceptionHandler implements WebExceptionHandler {
         final Mono<DataBuffer> body = Mono.just(dataBufferFactory.wrap(mapper.writeValueAsBytes(errorResponse)));
         return exchange.getResponse().writeWith(body);
     }
-
 }

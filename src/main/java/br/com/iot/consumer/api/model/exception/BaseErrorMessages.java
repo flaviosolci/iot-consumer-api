@@ -6,20 +6,21 @@ import java.util.ResourceBundle;
 
 public class BaseErrorMessages {
 
-
     public static final BaseErrorMessages GENERIC_ERROR = new BaseErrorMessages("generic");
-    public static final BaseErrorMessages GENERIC_INVALID_PARAMETERS = new BaseErrorMessages("generic.invalid.parameters");
-    public static final BaseErrorMessages GENERIC_NOT_FOUND = new BaseErrorMessages("generic.notfound");
-    public static final BaseErrorMessages GENERIC_METHOD_NOT_ALLOWED = new BaseErrorMessages("generic.methodnotallowed");
+    public static final BaseErrorMessages GENERIC_INVALID_PARAMETERS = new BaseErrorMessages("generic.invalid.parameter");
+    public static final BaseErrorMessages GENERIC_NOT_FOUND = new BaseErrorMessages("generic.notFound");
+    public static final BaseErrorMessages GENERIC_METHOD_NOT_ALLOWED = new BaseErrorMessages("generic.methodNotAllowed");
+    public static final BaseErrorMessages GENERIC_UNAUTHENTICATED_EXCEPTION = new BaseErrorMessages("generic.unauthenticated");
+    public static final BaseErrorMessages GENERIC_UNAUTHORIZED_EXCEPTION = new BaseErrorMessages("generic.unauthorized");
 
     private final String key;
-    private String[] params;
+    private Object[] params;
 
     public BaseErrorMessages(String key) {
         this.key = key;
     }
 
-    public BaseErrorMessages withParams(String... params) {
+    public BaseErrorMessages withParams(Object... params) {
         this.params = params;
         return this;
     }

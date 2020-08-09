@@ -1,45 +1,22 @@
 package br.com.iot.consumer.api.model.exception;
 
-import java.util.Collections;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.immutables.value.Value;
+import org.springframework.lang.Nullable;
+
 import java.util.List;
 
-public class ErrorResponse {
-
-    private final String code;
-    private final String description;
-    private final List<ErrorField> fields;
-
-    public ErrorResponse(String code, String description, List<ErrorField> fields) {
-        this.code = code;
-        this.description = description;
-        this.fields = fields;
+@Value.Immutable
+public interface ErrorResponse {
+    @Value.Default
+    default String getCode() {
+        return "GenericError";
     }
 
-    public ErrorResponse(String description, List<ErrorField> fields) {
-        this("GenericError", description, fields);
-    }
+    String getDescription();
 
-    public ErrorResponse(String code, BaseErrorMessages errorMessages, List<ErrorField> fields) {
-        this(code, errorMessages.getMessage(), fields);
-    }
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    List<ErrorField> getFields();
 
-    public ErrorResponse(BaseErrorMessages errorMessages) {
-        this("GenericError", errorMessages.getMessage(), Collections.emptyList());
-    }
-
-    public ErrorResponse(String description) {
-        this("GenericError", description, Collections.emptyList());
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<ErrorField> getFields() {
-        return fields;
-    }
 }

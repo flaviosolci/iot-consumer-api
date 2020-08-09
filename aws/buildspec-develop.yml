@@ -3,26 +3,25 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=133276173069.dkr.ecr.us-east-1.amazonaws.com/iot-consumer
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - REPOSITORY_URI=$DOCKER_HUB_REPO
+      - docker login --username=$DOCKER_HUB_USER --password=$DOCKER_HUB_PASS
   build:
     commands:
       - echo Build started on `date`
       - echo Building application...
-      - ./gradlew --no-daemon -x clean build
+      - ./gradlew --stacktrace clean build
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest_develop -f docker/Dockerfile .
-      - docker tag $REPOSITORY_URI:latest_develop $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $REPOSITORY_URI:consumer-latest-develop -f docker/dev.Dockerfile .
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest_develop
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:consumer-latest-develop
+reports:
+  JacocoReport:
+    files:
+      - '**/*'
+    base-directory: build/test-results/test
 cache:
   paths:
-    - '/root/.gradle/**/*'
+    - '/root/.gradle/wrapper/**/*'
