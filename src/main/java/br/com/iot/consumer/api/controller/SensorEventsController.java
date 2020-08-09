@@ -30,7 +30,7 @@ public class SensorEventsController {
         this.sensorEventsQueryService = sensorEventsQueryService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<SensorEventResponse> findAll(@Valid EventsFilter eventsFilter) {
         return sensorEventsQueryService.findAllWithFilter(eventsFilter)
