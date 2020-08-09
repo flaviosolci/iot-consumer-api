@@ -1,8 +1,0 @@
-version: '3.4'
-services:
-  timescaledb:
-    build:
-      context: .
-      dockerfile: timescaledb.Dockerfile
-    ports:
-      - 5432:5432

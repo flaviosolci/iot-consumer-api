@@ -15,7 +15,7 @@ phases:
       - echo Building application...
       - ./gradlew --no-daemon -x clean build
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest_develop -f docker/Dockerfile .
+      - docker build -t $REPOSITORY_URI:latest_develop -f docker/dev.Dockerfile .
       - docker tag $REPOSITORY_URI:latest_develop $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -23,6 +23,11 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest_develop
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+reports:
+  JacocoReport:
+    files:
+      - '**/*'
+    base-directory: build/test-results/test
 cache:
   paths:
-    - '/root/.gradle/**/*'
+    - '/root/.gradle/wrapper/**/*'

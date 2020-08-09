@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  profiles: docker
+  r2dbc:
+    url: r2dbc:pool:postgresql://timescaledb:5432/postgres
+    username: postgres
+    password: password
+  flyway:
+    url: jdbc:postgresql://timescaledb:5432/postgres
+    user: postgres
+    password: password
+  application.name: consumer-api
+  cloud:
+      kafka:
+        brokers:
+          - kafka_0:29092
+          - kafka_1:29093
+logging:
+  level:
+    root: INFO
+    br.com.iot: DEBUG
+  pattern:
+    console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'

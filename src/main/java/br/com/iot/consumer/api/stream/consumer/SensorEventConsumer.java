@@ -29,7 +29,7 @@ public class SensorEventConsumer {
     private void processEvent(Flux<SensorEvent> sensorEventFlux) {
         sensorEventService.processEvent(sensorEventFlux)
                 .subscribe(null,
-                        throwable -> LOG.error("===== Failed to save event {}", sensorEventService),
-                        () -> LOG.debug("==== Finished the process of the event {}", sensorEventService));
+                        throwable -> LOG.error("===== Failed to save event ====", throwable),
+                        () -> LOG.debug("==== Finished the process of the event ===="));
     }
 }
