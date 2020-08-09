@@ -13,7 +13,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building application...
-      - ./gradlew --no-daemon -x clean build
+      - ./gradlew --stacktrace clean build
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest_develop -f docker/dev.Dockerfile .
       - docker tag $REPOSITORY_URI:latest_develop $REPOSITORY_URI:$IMAGE_TAG
