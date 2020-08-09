@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
-    id 'nebula.release' version '13.0.0'
     id 'jacoco'
 }
 
@@ -12,10 +11,6 @@ group = 'br.com.iot'
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
-nebulaRelease {
-    addReleaseBranchPattern(/master/)
-    addReleaseBranchPattern(/develop/)
-}
 
 repositories {
     mavenCentral()
