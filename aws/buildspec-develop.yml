@@ -1,6 +1,10 @@
 version: 0.2
 
 phases:
+  pre_build:
+    commands:
+      - REPOSITORY_URI=$DOCKER_HUB_REPO
+      - docker login --username=$DOCKER_HUB_USER --password=$DOCKER_HUB_PASS
   build:
     commands:
       - echo Build started on `date`
