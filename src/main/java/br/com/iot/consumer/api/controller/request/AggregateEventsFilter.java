@@ -4,27 +4,27 @@ import br.com.iot.consumer.api.model.search.AggregateFunctionType;
 import br.com.iot.consumer.api.model.search.SensorEventGroupBy;
 import br.com.iot.consumer.api.model.search.SensorEventSortField;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AggregateEventsFilter {
 
     @Valid
-    private Filter filter = new Filter();
+    @NotNull(message = "{mandatory.filter}")
+    private SensorFilter filter;
     @Valid
-    private AggregateEvents aggregate = new AggregateEvents();
+    @NotNull(message = "{mandatory.aggregate}")
+    private AggregateEvents aggregate;
 
-    public Filter getFilter() {
+    public SensorFilter getFilter() {
         return filter;
     }
 
-    public void setFilter(Filter filter) {
+    public void setFilter(SensorFilter filter) {
         this.filter = filter;
     }
 
@@ -39,22 +39,20 @@ public class AggregateEventsFilter {
     @Override
     public String toString() {
         return "AggregateEventsFilter{" +
-                "startDate=" + filter.getStartDate() +
-                ", endDate=" + filter.getEndDate() +
-                ", sensorId=" + filter.getSensorId() +
+                "filter=" + filter +
                 ", aggregate=" + aggregate +
                 '}';
     }
 
     public static class AggregateEvents {
 
-        @NotEmpty
+        @NotEmpty(message = "{mandatory.aggregate.request.groupBy}")
         private List<@NotNull SensorEventGroupBy> groupBy;
-        @NotNull
+        @NotNull(message = "{invalid.aggregate.request.sortBy}")
         private SensorEventSortField sortBy = SensorEventSortField.NAME;
-        @NotNull
+        @NotNull(message = "{invalid.aggregate.request.direction}")
         private Sort.Direction direction = Sort.Direction.ASC;
-        @NotNull
+        @NotNull(message = "{invalid.aggregate.request.type}")
         private AggregateFunctionType type;
 
         public List<SensorEventGroupBy> getGroupBy() {
@@ -105,47 +103,4 @@ public class AggregateEventsFilter {
         }
     }
 
-    public static class Filter {
-
-        @NotNull
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        private LocalDateTime startDate;
-        @NotNull
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        private LocalDateTime endDate;
-        private Long sensorId;
-
-        public LocalDateTime getStartDate() {
-            return startDate;
-        }
-
-        public void setStartDate(LocalDateTime startDate) {
-            this.startDate = startDate;
-        }
-
-        public LocalDateTime getEndDate() {
-            return endDate;
-        }
-
-        public void setEndDate(LocalDateTime endDate) {
-            this.endDate = endDate;
-        }
-
-        public Long getSensorId() {
-            return sensorId;
-        }
-
-        public void setSensorId(Long sensorId) {
-            this.sensorId = sensorId;
-        }
-
-        @Override
-        public String toString() {
-            return "Filter{" +
-                    "startDate=" + startDate +
-                    ", endDate=" + endDate +
-                    ", sensorId=" + sensorId +
-                    '}';
-        }
-    }
 }
