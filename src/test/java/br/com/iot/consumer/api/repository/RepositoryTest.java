@@ -20,10 +20,10 @@ import java.nio.file.Path;
 public abstract class RepositoryTest {
 
     private static final DatabaseClient databaseClient = MemDatabaseConfig.databaseClient();
-    private static final String DEFAULT_FOLDER = "/db/sql/test";
+    private static final String DEFAULT_FOLDER = "/db/sql/test/";
 
     protected static void executeSQL(String filePath) throws IOException, URISyntaxException {
-        final var resource = SensorEventRepositoryTest.class.getResource("/db/sql/test/" + filePath);
+        final var resource = SensorEventRepositoryTest.class.getResource(DEFAULT_FOLDER + filePath);
         databaseClient.execute(Files.readString(Path.of(resource.toURI())))
                 .fetch()
                 .rowsUpdated()

@@ -11,8 +11,6 @@ import reactor.core.publisher.Mono;
 /** Webflux does not se the context path automatically, so we do that here for every request */
 public class ContextPathFilter implements WebFilter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContextPathFilter.class);
-
     private final String context;
 
     public ContextPathFilter(String context) {

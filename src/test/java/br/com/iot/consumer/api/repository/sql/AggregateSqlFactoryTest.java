@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Tests for {@link AggregateSqlFactory} */
 @ActiveProfiles("test")
@@ -36,7 +37,7 @@ class AggregateSqlFactoryTest {
     @ParameterizedTest
     @MethodSource("sqlStrategy")
     void testGet(AggregateFunctionType type, AggregateSqlStrategy expected) {
-        assertFalse(!testClass.get(type).getClass().isInstance(expected));
+        assertTrue(testClass.get(type).getClass().isInstance(expected));
     }
 
 }

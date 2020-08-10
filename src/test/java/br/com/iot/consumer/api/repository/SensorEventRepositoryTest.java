@@ -5,8 +5,6 @@ import br.com.iot.consumer.api.model.entity.SensorEventEntity;
 import br.com.iot.consumer.api.repository.sql.AggregateSqlFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.r2dbc.core.DatabaseClient;
@@ -20,11 +18,9 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-@ContextConfiguration(classes = SensorEventRepository.class)
 /** Tests for  {@link SensorEventRepository} */
+@ContextConfiguration(classes = SensorEventRepository.class)
 class SensorEventRepositoryTest extends RepositoryTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SensorEventRepositoryTest.class);
 
     @Autowired
     private SensorEventRepository testClass;
