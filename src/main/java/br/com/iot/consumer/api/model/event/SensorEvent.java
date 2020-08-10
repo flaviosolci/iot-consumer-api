@@ -2,6 +2,7 @@ package br.com.iot.consumer.api.model.event;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.immutables.value.Value;
+import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -10,6 +11,7 @@ import java.time.OffsetDateTime;
 @Value.Style(builder = "new")
 @JsonDeserialize(builder = ImmutableSensorEvent.Builder.class)
 public interface SensorEvent {
+
     Long getId();
 
     BigDecimal getValue();
@@ -19,4 +21,7 @@ public interface SensorEvent {
     String getType();
 
     String getName();
+
+    @Nullable
+    Long getClusterId();
 }

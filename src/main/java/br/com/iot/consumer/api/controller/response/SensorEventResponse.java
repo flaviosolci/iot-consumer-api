@@ -1,6 +1,7 @@
 package br.com.iot.consumer.api.controller.response;
 
 import br.com.iot.consumer.api.model.event.ImmutableSensorEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.immutables.value.Value;
 
@@ -11,6 +12,7 @@ import java.time.OffsetDateTime;
 @JsonDeserialize(builder = ImmutableSensorEvent.Builder.class)
 public interface SensorEventResponse {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     OffsetDateTime getTimestamp();
 
     Long getSensorId();

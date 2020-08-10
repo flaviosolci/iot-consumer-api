@@ -12,7 +12,7 @@ public abstract class BaseSqlStrategy implements AggregateSqlStrategy {
     public AggregateSensorEventDto mapAggregation(Row row, RowMetadata metadata) {
         return ImmutableAggregateSensorEventDto.builder()
                 .count(row.get("count", Integer.class))
-                .name(metadata.getColumnNames().contains("name") ? row.get("name", String.class) : null)
+                .clusterId(metadata.getColumnNames().contains("cluster_id") ? row.get("cluster_id", String.class) : null)
                 .type(metadata.getColumnNames().contains("type") ? row.get("type", String.class) : null)
                 .value(row.get("aggregate_result", BigDecimal.class))
                 .function(getType())

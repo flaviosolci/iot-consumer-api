@@ -45,6 +45,7 @@ dependencies {
     implementation 'org.immutables:value:2.8.8'
     annotationProcessor 'org.immutables:value:2.8.8'
     implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.4.RELEASE'
     runtimeOnly 'org.postgresql:postgresql'

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class EventsFilter {
 
     @Valid
-    @NotNull
-    private Filter filter = new Filter();
+    @NotNull(message = "{mandatory.filter}")
+    private Filter filter;
     @Valid
     private PageAndSort page = new PageAndSort();
 
@@ -44,14 +44,15 @@ public class EventsFilter {
 
     public static class Filter {
 
-        @NotNull
+        @NotNull(message = "{mandatory.filter.request.startDate}")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime startDate;
-        @NotNull
+        @NotNull(message = "{mandatory.filter.request.endDate}")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime endDate;
         private String eventType;
         private Long sensorId;
+        private Long clusterId;
 
         public LocalDateTime getStartDate() {
             return startDate;
@@ -85,6 +86,14 @@ public class EventsFilter {
             this.sensorId = sensorId;
         }
 
+        public Long getClusterId() {
+            return clusterId;
+        }
+
+        public void setClusterId(Long clusterId) {
+            this.clusterId = clusterId;
+        }
+
         @Override
         public String toString() {
             return "Filter{" +
@@ -92,20 +101,21 @@ public class EventsFilter {
                     ", endDate=" + endDate +
                     ", eventType='" + eventType + '\'' +
                     ", sensorId=" + sensorId +
+                    ", clusterId=" + clusterId +
                     '}';
         }
     }
 
     public static class PageAndSort {
 
-        @Max(value = 1000, message = "The field 'limit' must be between 1 and 1000.")
-        @Min(value = 1, message = "The field 'limit' must be between 1 and 1000.")
+        @Max(value = 100, message = "{invalid.page.request.limit}")
+        @Min(value = 1, message = "{invalid.page.request.limit}")
         private Integer limit = 50;
-        @Min(value = 0, message = "The field 'page' starts at 0")
+        @Min(value = 0, message = "{invalid.page.request.offset}")
         private Integer offset = 0;
-        @NotNull
+        @NotNull(message = "{invalid.page.request.sortBy}")
         private SensorEventSortField sortBy = SensorEventSortField.TIMESTAMP;
-        @NotNull
+        @NotNull(message = "{invalid.page.request.direction}")
         private Sort.Direction direction = Sort.Direction.DESC;
 
         public Integer getLimit() {

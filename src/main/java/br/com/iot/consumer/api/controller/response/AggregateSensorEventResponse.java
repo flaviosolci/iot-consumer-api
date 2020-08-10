@@ -14,7 +14,7 @@ public interface AggregateSensorEventResponse {
     Integer getCount();
 
     @Nullable
-    String getName();
+    String getClusterId();
 
     @Nullable
     String getType();

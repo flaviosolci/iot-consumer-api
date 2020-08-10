@@ -40,7 +40,7 @@ class SensorEventRepositoryTest extends RepositoryTest {
     @Test
     void testSave() {
         final var timestamp = OffsetDateTime.of(2020, 10, 1, 10, 10, 10, 10, ZoneOffset.UTC);
-        final var eventEntity = new SensorEventEntity(timestamp, 12345L, "TEMPERATURE", BigDecimal.TEN, "Test");
+        final var eventEntity = new SensorEventEntity(timestamp, 12345L, "TEMPERATURE", BigDecimal.TEN, "Test", 10L);
         StepVerifier.create(testClass.save(eventEntity)).verifyComplete();
 
         databaseClient.execute("SELECT COUNT(*) FROM sensor_event WHERE sensor_id = 12345 AND name = 'Test' AND type ='TEMPERATURE' and value = 10").fetch()

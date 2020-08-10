@@ -13,13 +13,15 @@ public class SensorEventEntity {
     private final String type;
     private final BigDecimal value;
     private final String name;
+    private final Long clusterId;
 
-    public SensorEventEntity(OffsetDateTime timestamp, Long sensorId, String type, BigDecimal value, String name) {
+    public SensorEventEntity(OffsetDateTime timestamp, Long sensorId, String type, BigDecimal value, String name, Long clusterId) {
         this.timestamp = timestamp;
         this.sensorId = sensorId;
         this.type = type;
         this.value = value;
         this.name = name;
+        this.clusterId = clusterId;
     }
 
     public String getType() {

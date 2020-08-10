@@ -4,10 +4,12 @@ import br.com.iot.consumer.api.model.search.AggregateFunctionType;
 import br.com.iot.consumer.api.model.search.SensorEventGroupBy;
 import br.com.iot.consumer.api.model.search.SensorEventSortField;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,16 +17,16 @@ public class AggregateEventsFilter {
 
     @Valid
     @NotNull(message = "{mandatory.filter}")
-    private SensorFilter filter;
+    private Filter filter;
     @Valid
     @NotNull(message = "{mandatory.aggregate}")
     private AggregateEvents aggregate;
 
-    public SensorFilter getFilter() {
+    public Filter getFilter() {
         return filter;
     }
 
-    public void setFilter(SensorFilter filter) {
+    public void setFilter(Filter filter) {
         this.filter = filter;
     }
 
@@ -47,11 +49,7 @@ public class AggregateEventsFilter {
     public static class AggregateEvents {
 
         @NotEmpty(message = "{mandatory.aggregate.request.groupBy}")
-        private List<@NotNull SensorEventGroupBy> groupBy;
-        @NotNull(message = "{invalid.aggregate.request.sortBy}")
-        private SensorEventSortField sortBy = SensorEventSortField.NAME;
-        @NotNull(message = "{invalid.aggregate.request.direction}")
-        private Sort.Direction direction = Sort.Direction.ASC;
+        private List<@NotNull(message = "{invalid.aggregate.request.groupBy}") SensorEventGroupBy> groupBy;
         @NotNull(message = "{invalid.aggregate.request.type}")
         private AggregateFunctionType type;
 
@@ -68,39 +66,64 @@ public class AggregateEventsFilter {
             this.groupBy = groupBy;
         }
 
-        public SensorEventSortField getSortBy() {
-            return sortBy;
-        }
-
-        public void setSortBy(SensorEventSortField sortBy) {
-            this.sortBy = sortBy;
-        }
-
-        public Sort.Direction getDirection() {
-            return direction;
-        }
-
-        public void setDirection(Sort.Direction direction) {
-            this.direction = direction;
+        public AggregateFunctionType getType() {
+            return type;
         }
 
         public void setType(AggregateFunctionType type) {
             this.type = type;
         }
 
-        public AggregateFunctionType getType() {
-            return type;
-        }
-
         @Override
         public String toString() {
             return "AggregateEvents{" +
                     "groupBy=" + groupBy +
-                    ", sortBy=" + sortBy +
-                    ", direction=" + direction +
                     ", type=" + type +
                     '}';
         }
     }
 
+    public static class Filter {
+
+        @NotNull(message = "{mandatory.filter.request.startDate}")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        private LocalDateTime startDate;
+        @NotNull(message = "{mandatory.filter.request.endDate}")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        private LocalDateTime endDate;
+        private Long sensorId;
+
+        public LocalDateTime getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(LocalDateTime startDate) {
+            this.startDate = startDate;
+        }
+
+        public LocalDateTime getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(LocalDateTime endDate) {
+            this.endDate = endDate;
+        }
+
+        public Long getSensorId() {
+            return sensorId;
+        }
+
+        public void setSensorId(Long sensorId) {
+            this.sensorId = sensorId;
+        }
+
+        @Override
+        public String toString() {
+            return "Filter{" +
+                    "startDate=" + startDate +
+                    ", endDate=" + endDate +
+                    ", sensorId=" + sensorId +
+                    '}';
+        }
+    }
 }

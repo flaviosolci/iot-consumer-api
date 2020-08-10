@@ -18,6 +18,10 @@ logging:
     root: INFO
     br.com.iot: DEBUG
     org.springframework.data.r2dbc: DEBUG
-    org.springframework.data.r2dbc.connectionfactory: DEBUG
   pattern:
     console: '%highlight(<<%-5level>>) %d{dd-MM-yy HH:mm:ss.SSS} [%thread] %cyan(%c{0}.%M) - %msg%n'
+
+management:
+  endpoints:
+    web:
+      base-path: /

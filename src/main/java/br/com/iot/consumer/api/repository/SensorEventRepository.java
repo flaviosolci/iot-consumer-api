@@ -75,6 +75,10 @@ public class SensorEventRepository {
             criteria = criteria.and("sensor_id").is(filterRequest.getFilter().getSensorId());
         }
 
+        if (filterRequest.getFilter().getClusterId() != null) {
+            criteria = criteria.and("cluster_id").is(filterRequest.getFilter().getClusterId());
+        }
+
         return criteria;
     }
 
