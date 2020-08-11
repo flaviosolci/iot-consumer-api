@@ -133,7 +133,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ErrorResponse'
-  /events/clusters:
+  /events/aggregate:
     get:
       security:
         - bearerAuth:
