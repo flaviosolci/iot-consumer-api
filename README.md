@@ -166,14 +166,20 @@ Below are the options:
       ./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic iot-data
       ````
 
-   6. Start the producer application
+   6. We also need a the TimescaleDB. For that we need have docker installed and run the below command:
 
+      ```bash
+      docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
+   ```
+   
+7. Start the consumer application
+   
       1. Go to the root directory of this project
       2. Run `./gradlew bootrun`
-
-   7. Application will start on `localhost:8092`
-
-   8. Checkout the OpenApi to know about the endpoint and how execute them.
+   
+   8. Application will start on `localhost:8092`
+   
+   9. Checkout the OpenApi to know about the endpoint and how execute them.
 
 ## Documentation
 
