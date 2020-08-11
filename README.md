@@ -2,9 +2,7 @@
 
 API to consume IoT sensor data from Kafka and provide a visualization of the data.
 
-![AWS CodeBuild Master](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoibEVHVmNuaTBrR245ZnFEK2sxdmRacDJ5RHdjakdiSmEvVHJNdi8wTkhUNXRQejFNaytxZHA5cjBPRHRDMDBYd3NLT1B5eWFiWEgvM1ppSCttQkhQNy9vPSIsIml2UGFyYW1ldGVyU3BlYyI6IjJTUUZvMEtjY20yQ1RLTXEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
-
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/flaviosolci/iot-services/consumer-latest)
+![AWS CodeBuild Master](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZEdQeWplMzRQUHlhckdWRjZiZ3lRNDVPU1dsd0xocHRQYzNURWtMaElKMmNzcjFuRjE1eUJpa3VZNXJHd3o1SHlkNEZoSWlLT0tLRldMb0FVUjBjeXBVPSIsIml2UGFyYW1ldGVyU3BlYyI6InNoS3VuUUgrazQrL3RRUEUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/flaviosolci/iot-services/consumer-latest)
 
 ## Technologies
 
