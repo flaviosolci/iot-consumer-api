@@ -1,0 +1,354 @@
+openapi: 3.0.1
+info:
+  title: IoT Consumer API
+  description: 'Consume IO data'
+  contact:
+    email: flaviosolci@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8092/producer-api
+    description: Default (no Docker)
+  - url: http://localhost:8080/producer-api
+    description: Via docker
+tags:
+  - name: Events
+    description: Handle single events
+  - name: Maintenance
+    description: System maintenance
+paths:
+  /health:
+    get:
+      summary: Check applications health
+      tags:
+        - Maintenance
+      responses:
+        200:
+          description: Application is OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /events:
+    get:
+      security:
+        - bearerAuth:
+            - read-sensor-data
+            - admin
+      tags:
+        - Events
+      summary: Get all the events for a specific time frame
+      description: Have a option to get an list of events filtered
+      parameters:
+        - in: query
+          name: filter.startDate
+          schema:
+            type: string
+            format: date-time
+          description: Start date of the time frame selected. Pattern = yyyy-MM-dd'T'HH:mm:ss
+          required: true
+          example: '2020-08-09T19:25:00'
+        - in: query
+          name: filter.endDate
+          schema:
+            type: string
+            format: date-time
+          description: End date of the time frame selected. Pattern = yyyy-MM-dd'T'HH:mm:ss  `
+          example: '2020-08-11T19:40:00'
+          required: true
+        - in: query
+          name: filter.eventType
+          schema:
+            type: string
+          description: Event type to filter the events
+          example: 'TEMPERATURE'
+        - in: query
+          name: filter.sensorId
+          schema:
+            type: integer
+            format: int64
+          description: Sensor ID to filter the events
+          example: 12345
+        - in: query
+          name: filter.clusterId
+          schema:
+            type: integer
+            format: int64
+          description: Cluster ID to filter the events
+          example: 54321
+        - in: query
+          name: page.limit
+          schema:
+            type: integer
+            format: int32
+            default: 50
+          description: Limit of records per page.
+          example: 10
+        - in: query
+          name: page.offset
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          description: |
+            'The number of records you to skip before selecting records. I.e.: If we have 10 elements and you send `page.offset` as 4, we skip the first for elements and return the last 6.'
+          example: 0
+        - in: query
+          name: page.sortBy
+          schema:
+            type: string
+            enum: [TIMESTAMP, SENSOR_ID, CLUSTER_ID]
+            default: TIMESTAMP
+          description: Which field the return should be sorted
+          example: TIMESTAMP
+        - in: query
+          name: page.sortDirection
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: DESC
+          description: 'Direction which you want the data sorted: Ascending or Descending'
+          example: DESC
+      responses:
+        200:
+          description: List with all the events found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SensorEventResponse'
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationErrorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+  /events/clusters:
+    get:
+      security:
+        - bearerAuth:
+            - read-sensor-data
+            - admin
+      tags:
+        - Events
+      summary: Get all the events for a specific time frame
+      description: Have a option to get an list of events filtered
+      parameters:
+        - in: query
+          name: filter.startDate
+          schema:
+            type: string
+            format: date-time
+          description: Start date of the time frame selected. Pattern = yyyy-MM-dd'T'HH:mm:ss
+          required: true
+          example: '2020-08-09T19:25:00'
+        - in: query
+          name: filter.endDate
+          schema:
+            type: string
+            format: date-time
+          description: End date of the time frame selected. Pattern = yyyy-MM-dd'T'HH:mm:ss  `
+          example: '2020-08-11T19:40:00'
+          required: true
+        - in: query
+          name: filter.sensorId
+          schema:
+            type: integer
+            format: int64
+          description: Sensor ID to filter the events
+          example: 12345
+        - in: query
+          name: filter.clusterId
+          schema:
+            type: integer
+            format: int64
+          description: Cluster ID to filter the events
+          example: 54321
+        - in: query
+          name: aggregate.groupBy
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [TYPE, SENSOR_ID, CLUSTER_ID]
+          required: true
+          description: List of group by fields
+          example: SENSOR_ID
+        - in: query
+          name: aggregate.type
+          schema:
+            type: string
+            enum: [AVERAGE, MAX, MIN, MEDIAN]
+          description: Aggregate function type
+          example: AVERAGE
+          required: true
+      responses:
+        200:
+          description: List with all the events found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AggregateSensorEventResponse'
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationErrorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: JWT token
+      flows:
+        clientCredentials:
+          tokenUrl: 'https://dev-928245.okta.com/oauth2/ausp92bbxrQ9m9Ojq4x6/v1/token'
+          scopes:
+            admin: Access to produce events
+            read-sensor-data: Just read data
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          description: Application status
+          type: string
+          example: UP
+    ValidationErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "ValidationException"
+        description:
+          type: string
+          description: Error description
+          example: "The field 'every' must be between 0 and 60."
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorField'
+          nullable: true
+      required:
+        - code
+        - description
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        description:
+          type: string
+          description: Error description
+      required:
+        - code
+        - description
+    ErrorField:
+      type: object
+      properties:
+        field:
+          type: string
+          description: In case the error was caused by a specific field, it will be returned here the field name
+          example: "every"
+        description:
+          type: string
+          description: Especific error description for the field
+          example: "The field 'every' must be between 0 and 60."
+    SensorEventResponse:
+      description: A single event entry
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: |
+            Time of the event in UTC.
+            Pattern: yyyy-MM-dd'T'HH:mm:ssZ
+          example: '2020-08-10T21:21:09-0300'
+        sensorId:
+          type: integer
+          format: int64
+          description: ID of the sensor
+          example: 1234
+        type:
+          type: string
+          description: Event type
+          example: TEMPERATURE
+        value:
+          type: number
+          format: double
+          description: The value measured in this event
+          example: 35.767344880769784
+        name:
+          type: string
+          description: Sensor name
+          example: Living_Room_2
+      required:
+        - timestamp
+        - sensorId
+        - type
+        - value
+        - name
+    AggregateSensorEventResponse:
+      description: Represents an aggregate event
+      type: object
+      properties:
+        sensorId:
+          type: integer
+          format: int64
+          description: ID of the sensor
+          example: 1234
+          nullable: true
+        type:
+          type: string
+          description: Event type
+          example: TEMPERATURE
+          nullable: true
+        value:
+          type: number
+          format: double
+          description: The aggregation result
+          example: 35.767344880769784
+        name:
+          type: string
+          description: Sensor name
+          example: Living_Room_2
+          nullable: true
+        count:
+          type: integer
+          format: int32
+          description: Total of rows for this group
+          example: 100
+        function:
+          type: string
+          enum: [AVERAGE, MAX, MIN, MEDIAN]
+          description: Aggregate function type
+          example: AVERAGE
+      required:
+        - value
+        - count
+        - function

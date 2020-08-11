@@ -17,7 +17,10 @@ public interface AggregateSensorEventDto {
     String getType();
 
     @Nullable
-    String getClusterId();
+    Long getClusterId();
+
+    @Nullable
+    Long getSensorId();
 
     AggregateFunctionType getFunction();
 }

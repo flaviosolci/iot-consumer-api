@@ -44,6 +44,10 @@ public class SensorEventEntity {
         return name;
     }
 
+    public Long getClusterId() {
+        return clusterId;
+    }
+
     @Override
     public String toString() {
         return "SensorEventEntity{" +
@@ -52,6 +56,7 @@ public class SensorEventEntity {
                 ", type='" + type + '\'' +
                 ", value=" + value +
                 ", name='" + name + '\'' +
+                ", clusterId=" + clusterId +
                 '}';
     }
 }

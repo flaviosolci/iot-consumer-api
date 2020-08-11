@@ -9,6 +9,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventsFilter {
 
@@ -54,6 +56,8 @@ public class EventsFilter {
         private Long sensorId;
         private Long clusterId;
 
+        private final Map<String, Object> optionalFields = new HashMap<>(3);
+
         public LocalDateTime getStartDate() {
             return startDate;
         }
@@ -75,6 +79,7 @@ public class EventsFilter {
         }
 
         public void setEventType(String eventType) {
+            optionalFields.put("type", eventType);
             this.eventType = eventType;
         }
 
@@ -83,6 +88,7 @@ public class EventsFilter {
         }
 
         public void setSensorId(Long sensorId) {
+            optionalFields.put("sensor_id", sensorId);
             this.sensorId = sensorId;
         }
 
@@ -91,7 +97,12 @@ public class EventsFilter {
         }
 
         public void setClusterId(Long clusterId) {
+            optionalFields.put("cluster_id", clusterId);
             this.clusterId = clusterId;
+        }
+
+        public Map<String, Object> getOptionalFields() {
+            return optionalFields;
         }
 
         @Override
@@ -116,7 +127,7 @@ public class EventsFilter {
         @NotNull(message = "{invalid.page.request.sortBy}")
         private SensorEventSortField sortBy = SensorEventSortField.TIMESTAMP;
         @NotNull(message = "{invalid.page.request.direction}")
-        private Sort.Direction direction = Sort.Direction.DESC;
+        private Sort.Direction sortDirection = Sort.Direction.DESC;
 
         public Integer getLimit() {
             return limit;
@@ -142,12 +153,12 @@ public class EventsFilter {
             this.sortBy = sortBy;
         }
 
-        public Sort.Direction getDirection() {
-            return direction;
+        public Sort.Direction getSortDirection() {
+            return sortDirection;
         }
 
-        public void setDirection(Sort.Direction direction) {
-            this.direction = direction;
+        public void setSortDirection(Sort.Direction sortDirection) {
+            this.sortDirection = sortDirection;
         }
 
         @Override
@@ -156,7 +167,7 @@ public class EventsFilter {
                     "limit=" + limit +
                     ", offset=" + offset +
                     ", sortBy=" + sortBy +
-                    ", direction=" + direction +
+                    ", direction=" + sortDirection +
                     '}';
         }
     }

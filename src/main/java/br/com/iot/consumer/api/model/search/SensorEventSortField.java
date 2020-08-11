@@ -1,7 +1,7 @@
 package br.com.iot.consumer.api.model.search;
 
 public enum SensorEventSortField {
-    TIMESTAMP("timestamp"), ID("id"), VALUE("value");
+    TIMESTAMP("timestamp"), SENSOR_ID("sensor_id"), CLUSTER_ID("cluster_id");
 
     private final String value;
 

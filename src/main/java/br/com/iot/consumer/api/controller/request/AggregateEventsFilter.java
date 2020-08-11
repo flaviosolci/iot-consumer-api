@@ -2,15 +2,15 @@ package br.com.iot.consumer.api.controller.request;
 
 import br.com.iot.consumer.api.model.search.AggregateFunctionType;
 import br.com.iot.consumer.api.model.search.SensorEventGroupBy;
-import br.com.iot.consumer.api.model.search.SensorEventSortField;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AggregateEventsFilter {
@@ -92,6 +92,9 @@ public class AggregateEventsFilter {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime endDate;
         private Long sensorId;
+        private Long clusterId;
+
+        private final Map<String, Long> optionalFields = new HashMap<>(2);
 
         public LocalDateTime getStartDate() {
             return startDate;
@@ -109,12 +112,18 @@ public class AggregateEventsFilter {
             this.endDate = endDate;
         }
 
-        public Long getSensorId() {
-            return sensorId;
+        public void setSensorId(Long sensorId) {
+            optionalFields.put("sensor_id", sensorId);
+            this.sensorId = sensorId;
         }
 
-        public void setSensorId(Long sensorId) {
-            this.sensorId = sensorId;
+        public void setClusterId(Long clusterId) {
+            optionalFields.put("cluster_id", clusterId);
+            this.clusterId = clusterId;
+        }
+
+        public Map<String, Long> getOptionalFields() {
+            return optionalFields;
         }
 
         @Override
@@ -123,6 +132,7 @@ public class AggregateEventsFilter {
                     "startDate=" + startDate +
                     ", endDate=" + endDate +
                     ", sensorId=" + sensorId +
+                    ", clusterId=" + clusterId +
                     '}';
         }
     }

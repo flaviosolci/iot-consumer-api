@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Tests for {@link AggregateSqlFactory} */

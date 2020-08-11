@@ -100,7 +100,7 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
-                            'br/com/iot/consumer/api/ApplicationStartup.class',
+                            'br/com/iot/consumer/api/ApplicationStarter.class',
                             'br/com/iot/consumer/api/exception/**',
                             'br/com/iot/consumer/api/mapper/**',
                             'br/com/iot/consumer/api/config/**',

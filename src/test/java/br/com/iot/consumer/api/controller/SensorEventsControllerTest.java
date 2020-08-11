@@ -237,7 +237,7 @@ class SensorEventsControllerTest {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.queryParam("filter.startDate", "2020-07-10T13:10:10")
                         .queryParam("filter.endDate", "2020-07-10T13:10:10")
-                        .queryParam("page.direction", "a")
+                        .queryParam("page.sortDirection", "a")
                         .build())
                 .exchange()
                 .expectStatus()
