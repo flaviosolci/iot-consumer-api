@@ -23,7 +23,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /** Tests for {@link SensorEventsQueryService} */
@@ -42,7 +41,7 @@ class SensorEventsQueryServiceTest {
     @Test
     void testFindBySensorId() {
         final var timestamp = OffsetDateTime.of(2020, 10, 1, 10, 10, 10, 10, ZoneOffset.UTC);
-        final var sensorEventEntity = new SensorEventEntity(timestamp, 1234L, "CPU", BigDecimal.TEN, "test");
+        final var sensorEventEntity = new SensorEventEntity(timestamp, 1234L, "CPU", BigDecimal.TEN, "test", 10L);
         when(eventRepository.findBySensorIdWithFilters(any())).thenReturn(Flux.just(sensorEventEntity));
 
         final var expected = ImmutableSensorEventResponse.builder()
@@ -77,14 +76,12 @@ class SensorEventsQueryServiceTest {
                 .type("CPU")
                 .value(BigDecimal.TEN)
                 .count(100)
-                .name("test")
                 .function(AggregateFunctionType.MAX)
                 .build();
 
         when(eventRepository.aggregateAsPerRequest(any())).thenReturn(Flux.just(eventDto));
 
         final var expected = ImmutableAggregateSensorEventResponse.builder()
-                .name("test")
                 .type("CPU")
                 .count(100)
                 .value(BigDecimal.TEN)

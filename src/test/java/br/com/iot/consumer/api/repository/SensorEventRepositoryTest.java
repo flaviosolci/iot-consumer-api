@@ -5,8 +5,6 @@ import br.com.iot.consumer.api.model.entity.SensorEventEntity;
 import br.com.iot.consumer.api.repository.sql.AggregateSqlFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.r2dbc.core.DatabaseClient;
@@ -20,11 +18,9 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-@ContextConfiguration(classes = SensorEventRepository.class)
 /** Tests for  {@link SensorEventRepository} */
+@ContextConfiguration(classes = SensorEventRepository.class)
 class SensorEventRepositoryTest extends RepositoryTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SensorEventRepositoryTest.class);
 
     @Autowired
     private SensorEventRepository testClass;
@@ -44,7 +40,7 @@ class SensorEventRepositoryTest extends RepositoryTest {
     @Test
     void testSave() {
         final var timestamp = OffsetDateTime.of(2020, 10, 1, 10, 10, 10, 10, ZoneOffset.UTC);
-        final var eventEntity = new SensorEventEntity(timestamp, 12345L, "TEMPERATURE", BigDecimal.TEN, "Test");
+        final var eventEntity = new SensorEventEntity(timestamp, 12345L, "TEMPERATURE", BigDecimal.TEN, "Test", 10L);
         StepVerifier.create(testClass.save(eventEntity)).verifyComplete();
 
         databaseClient.execute("SELECT COUNT(*) FROM sensor_event WHERE sensor_id = 12345 AND name = 'Test' AND type ='TEMPERATURE' and value = 10").fetch()

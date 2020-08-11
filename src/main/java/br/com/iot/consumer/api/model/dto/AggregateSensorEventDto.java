@@ -14,10 +14,13 @@ public interface AggregateSensorEventDto {
     Integer getCount();
 
     @Nullable
-    String getName();
+    String getType();
 
     @Nullable
-    String getType();
+    Long getClusterId();
+
+    @Nullable
+    Long getSensorId();
 
     AggregateFunctionType getFunction();
 }

@@ -11,12 +11,12 @@ phases:
       - echo Building application...
       - ./gradlew --stacktrace clean build
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:consumer-latest-develop -f docker/dev.Dockerfile .
+      - docker build -t $REPOSITORY_URI:consumer-latest -f docker/dev.Dockerfile .
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:consumer-latest-develop
+      - docker push $REPOSITORY_URI:consumer-latest
 reports:
   JacocoReport:
     files:

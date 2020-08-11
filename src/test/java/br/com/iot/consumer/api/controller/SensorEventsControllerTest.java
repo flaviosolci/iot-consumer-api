@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /** Test for {@link SensorEventsController} */
@@ -204,21 +203,6 @@ class SensorEventsControllerTest {
     }
 
     @Test
-    void testFindAllWithSensorWithSortBy() {
-        webClient.get()
-                .uri(uriBuilder -> uriBuilder.queryParam("filter.startDate", "2020-07-10T13:10:10")
-                        .queryParam("filter.endDate", "2020-07-10T13:10:10")
-                        .queryParam("page.sortBy", "NAME")
-                        .build())
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody();
-
-        verify(eventsQueryService, only()).findAllWithFilter(any());
-    }
-
-    @Test
     void testFindAllWithSensorWithSortByInvalid() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.queryParam("filter.startDate", "2020-07-10T13:10:10")
@@ -253,7 +237,7 @@ class SensorEventsControllerTest {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.queryParam("filter.startDate", "2020-07-10T13:10:10")
                         .queryParam("filter.endDate", "2020-07-10T13:10:10")
-                        .queryParam("page.direction", "a")
+                        .queryParam("page.sortDirection", "a")
                         .build())
                 .exchange()
                 .expectStatus()
@@ -384,24 +368,6 @@ class SensorEventsControllerTest {
     }
 
     @Test
-    void testAggregateSortByInvalid() {
-        webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/aggregate")
-                        .queryParam("filter.startDate", "2020-07-10T13:10:10")
-                        .queryParam("filter.endDate", "2020-07-10T13:10:10")
-                        .queryParam("aggregate.groupBy", "type")
-                        .queryParam("aggregate.type", "max")
-                        .queryParam("aggregate.sortBy", "a")
-                        .build())
-                .exchange()
-                .expectStatus()
-                .isBadRequest()
-                .expectBody();
-
-        verify(eventsQueryService, never()).aggregateAllWithFilter(any());
-    }
-
-    @Test
     void testAggregateDirection() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/aggregate")
@@ -417,24 +383,6 @@ class SensorEventsControllerTest {
                 .expectBody();
 
         verify(eventsQueryService, only()).aggregateAllWithFilter(any());
-    }
-
-    @Test
-    void testAggregateDirectionInvalid() {
-        webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/aggregate")
-                        .queryParam("filter.startDate", "2020-07-10T13:10:10")
-                        .queryParam("filter.endDate", "2020-07-10T13:10:10")
-                        .queryParam("aggregate.groupBy", "type")
-                        .queryParam("aggregate.type", "max")
-                        .queryParam("aggregate.direction", "a")
-                        .build())
-                .exchange()
-                .expectStatus()
-                .isBadRequest()
-                .expectBody();
-
-        verify(eventsQueryService, never()).aggregateAllWithFilter(any());
     }
 
     @Test
